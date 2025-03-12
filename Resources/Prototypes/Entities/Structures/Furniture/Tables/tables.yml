@@ -784,6 +784,54 @@
   - type: IconSmooth
     key: fancytablewhite
 
+#Spacezaak Table
+
+- type: entity
+  id: TableSpacezaak
+  parent: TableBase
+  name: Spacezaak Table
+  description: A table for playing Spacezaak.
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/Tables/wood.rsi
+  - type: Icon
+    sprite: Structures/Furniture/Tables/wood.rsi
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors: #excess damage (nuke?). avoid computational cost of spawning entities.
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: IconSmooth
+    key: spacezaaktable
+  - type: Construction
+    graph: Table
+    node: TableSpacezaak
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepFloor
+
 #Debug
 
 - type: entity
