@@ -1,0 +1,65 @@
+#Spacezaak Table that you can see in game.
+
+- type: entity
+  parent: TableBase
+  id: SpacezaakTable
+  name: Spacezaak Table
+  description: A table for playing Spacezaak
+  components:
+  - type: Sprite
+    sprite: Structures/Furniture/Tables/wood.rsi
+  - type: Icon
+    sprite: Structures/Furniture/Tables/wood.rsi
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors: #excess damage (nuke?). avoid computational cost of spawning entities.
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: IconSmooth
+    key: woodtable
+  - type: Tag
+    tags:
+    - Wooden
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWood
+  - type: TabletopGame
+    boardName: tabletop-spacezaak-board-name
+    size: 338, 274
+    setup:
+      !type:TabletopSpacezaakSetup
+      boardPrototype: SpacezaakTabletop
+
+#Spacezaak table for when you are in the actual tabletop session.
+
+- type: entity
+  id: SpacezaakTabletop
+  name: Spacezaak Table
+  parent: BaseBoardTabletop
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Fun/Tabletop/chessboard_tabletop.rsi
+    state: chessboard_tabletop
